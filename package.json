@@ -1,0 +1,12 @@
+{
+  "name": "flight-booking-full",
+  "version": "1.0.0",
+  "description": "Flight Booking Simulator — Node.js API + Python LangChain Agent",
+  "scripts": {
+    "install:api": "cd api && npm install",
+    "start:api": "cd api && node index.js",
+    "install:agent": "cd agent && pip install -r requirements.txt",
+    "start:agent": "cd agent && python agent.py",
+    "setup": "npm run install:api && npm run install:agent"
+  }
+}

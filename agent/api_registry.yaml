@@ -1,0 +1,65 @@
+# ============================================================
+#  Automation API Registry
+#  Used by the LangChain agent to auto-generate tools
+# ============================================================
+
+base_url: "https://st-ntx-3q0qb:8443"
+
+# The target host uses a self-signed / internal cert, so TLS verification
+# is disabled for this deployment. Flip to true once a proper cert is in place.
+verify_ssl: false
+
+# ── Authentication ─────────────────────────────────────────
+# Every API with `requires_auth: true` will automatically trigger this
+# login call first. The returned token is cached in-memory for the
+# lifetime of the Python process and re-used across tool invocations.
+#
+# Credentials are loaded from `agent/.env` on startup:
+#   AUTOMATION_USER  →  username
+#   AUTOMATION_PASS  →  password
+#
+# Copy `agent/.env.example` to `agent/.env` to get started.
+# `.env` is git-ignored so secrets never land in source control.
+auth:
+  type: bearer
+  method: POST
+  endpoint: /automation-api/session/login
+  credentials:
+    username_env: AUTOMATION_USER
+    password_env: AUTOMATION_PASS
+  # JSON field in the login response that contains the bearer token.
+  token_field: token
+  # How the token is attached to authenticated calls.
+  header: Authorization
+  header_format: "Bearer {token}"
+
+apis:
+  - id: get_centralized_connection_profiles
+    name: Get Centralized Deployed Connection Profiles
+    description: >
+      Returns the currently centralized deployed connection profiles that match
+      a search query. Filters by profile `type` (Database, FileTransfer, Hadoop,
+      Informatica, SAP, or `*` for all) and by `name` (supports `*`, `?`, and
+      comma-separated lists). Use this when the user wants to list, look up, or
+      inspect centralized connection profiles on the automation server.
+    method: GET
+    endpoint: /automation-api/deploy/connectionprofiles/centralized
+    requires_auth: true
+    parameters:
+      - name: type
+        in: query
+        required: false
+        type: string
+        default: "*"
+        enum: ["Database", "FileTransfer", "Hadoop", "Informatica", "SAP", "*"]
+        description: >
+          The type of connection profile such as Database, FileTransfer,
+          Hadoop, Informatica, SAP. Use * to get all types.
+      - name: name
+        in: query
+        required: false
+        type: string
+        default: "*"
+        description: >
+          The name of centralized connection profile. Supports for *, ?, and
+          comma. By default is *.
