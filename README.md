@@ -1,13 +1,3 @@
-# ✈️ Flight Booking Full Stack
-
-A complete flight booking system with a **Node.js REST API** and a **Python AI Agent** that talks to it via natural language.
-
-```
-flight-booking-full/
-├── api/        ← Node.js + Express REST API (port 3000)
-├── agent/      ← Python LangChain + Ollama AI agent
-└── package.json
-```
 
 ---
 
